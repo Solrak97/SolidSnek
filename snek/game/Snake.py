@@ -1,5 +1,8 @@
 import pygame
 
+from Box import Box
+
+
 class Snake:
     def __init__(self, pos):
         self.x, self.y = pos
@@ -7,29 +10,55 @@ class Snake:
         self.size = 10
         self.head_color = None
         self.snake_color = None
-        self.snake_body = [pos]
+        self.snake_body = [Box(pos, (self.size, self.size))]
         self.last_pos = self.snake_body[-1]
-        print((self.x+self.size/2, self.y-self.size/2, self.size, self.size))
+
+
+    def forward_movements(self, headpos):
+        self.last_pos = (self.snake_body[-1].x, self.snake_body[-1].y)
+        for i in range(len(self.snake_body) - 1, 0, -1):
+            self.snake_body[i].x = self.snake_body[i - 1].x
+            self.snake_body[i].y = self.snake_body[i - 1].y
+        
+        self.snake_body[0].x += headpos[0]
+        self.snake_body[0].y += headpos[1]
+            
+
+    def is_eating(self, food):
+        if self.snake_body[0].is_colliding(food):
+            self.snake_body.append(Box((self.last_pos), (self.size, self.size)))
+            return True
+        return False
+
 
 
     def move(self, event_list):
+        x = 0
+        y = 0
+        trigg = False
         for event in event_list:
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_LEFT:
-                    self.x -= 10
-                    print("left")
+                    x -= self.speed
+                    trigg = True
                 if event.key == pygame.K_RIGHT:
-                    self.x += 10
-                    print("right")
+                    x += self.speed
+                    trigg = True
                 if event.key == pygame.K_UP:
-                    self.y -= 10
-                    print("down")
+                    y -= self.speed
+                    trigg = True
                 if event.key == pygame.K_DOWN:
-                    self.y += 10
-                    print("up")
+                    y += self.speed
+                    trigg = True
 
+                if trigg:
+                    self.forward_movements((x, y))
+    
 
-
-    def render(self, screen):
-        pygame.draw.rect(screen, (0, 0, 0, 0), pygame.Rect(self.x+self.size/2, self.y-self.size/2, self.size, self.size))
+    def draw(self, screen):
+        for i, box in enumerate(self.snake_body):
+            if i == 0:
+                box.draw(screen, (255, 255, 0))
+            else:
+                box.draw(screen, (255, 255, 255))
         pass

@@ -1,5 +1,5 @@
 import pygame
-
+import random
 from Snake import Snake
 from Box import Box
 
@@ -9,9 +9,11 @@ class Game:
         self.has_delta = has_delta
         self.render = render
         self.is_sim = is_sim
+        self.width = 500
+        self.height = 450
 
         self.snake = Snake(pos=(255,220))
-        self.food = None
+        self.food = Box((255, 260), (10, 10))
     
         pygame.init()
 
@@ -22,7 +24,7 @@ class Game:
         getTicksLastFrame = 0
         screen = None
         if self.render:
-            screen = pygame.display.set_mode((500, 450))
+            screen = pygame.display.set_mode((self.width, self.height))
 
         while True:
 
@@ -52,6 +54,13 @@ class Game:
                 exit()
 
             self.snake.move(event_list)
+            if self.snake.is_eating(self.food):
+                rx = random.randint(0, self.width)
+                ry = random.randint(0, self.height)
+                
+                self.food.x = rx
+                self.food.y = ry
+
         pass
 
     
@@ -61,7 +70,8 @@ class Game:
 
 
     def render_game(self, screen):
-        screen.fill((255, 255, 255))
-        self.snake.render(screen)
+        screen.fill((0, 0, 0))
+        self.snake.draw(screen)
+        self.food.draw(screen, (0,255,0))
         pygame.display.flip()
         pass
