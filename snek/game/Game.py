@@ -10,7 +10,7 @@ class Game:
         self.render = render
         self.is_sim = is_sim
 
-        self.snake = Snake(pos=(0,0))
+        self.snake = Snake(pos=(255,220))
         self.food = None
     
         pygame.init()
@@ -38,18 +38,20 @@ class Game:
 
             if self.render:
                 self.render_game(screen)
+                pass
 
             getTicksLastFrame = t
 
 
 
     def game_step(self, delta):
-        for i in pygame.event.get():
+        event_list = pygame.event.get()
+        for i in event_list:
             if i.type == pygame.QUIT:
                 pygame.quit()
                 exit()
 
-            self.snake.move(pygame.event.get())
+            self.snake.move(event_list)
         pass
 
     
@@ -61,5 +63,5 @@ class Game:
     def render_game(self, screen):
         screen.fill((255, 255, 255))
         self.snake.render(screen)
-        pygame.display.flip
+        pygame.display.flip()
         pass

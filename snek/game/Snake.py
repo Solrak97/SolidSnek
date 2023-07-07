@@ -9,22 +9,27 @@ class Snake:
         self.snake_color = None
         self.snake_body = [pos]
         self.last_pos = self.snake_body[-1]
+        print((self.x+self.size/2, self.y-self.size/2, self.size, self.size))
 
 
     def move(self, event_list):
         for event in event_list:
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_LEFT:
-                    x1 -= 10
-                if event.key == pygame.K_ReventGHT:
-                    x1 += 10
+                    self.x -= 10
+                    print("left")
+                if event.key == pygame.K_RIGHT:
+                    self.x += 10
+                    print("right")
                 if event.key == pygame.K_UP:
-                    y1 -= 10
+                    self.y -= 10
+                    print("down")
                 if event.key == pygame.K_DOWN:
-                    y1 += 10
+                    self.y += 10
+                    print("up")
 
 
 
     def render(self, screen):
-        pygame.draw.rect(screen, (0, 0, 0, 0), pygame.Rect(30, 30, 60, 60))
+        pygame.draw.rect(screen, (0, 0, 0, 0), pygame.Rect(self.x+self.size/2, self.y-self.size/2, self.size, self.size))
         pass
